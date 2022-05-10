@@ -1,0 +1,36 @@
+{
+  "name": "daobounty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test",
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "develop": "truffle develop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorahacksglobal/hackerlinkbounties.git"
+  },
+  "keywords": [
+    "bounty"
+  ],
+  "author": "noodles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dorahacksglobal/hackerlinkbounties/issues"
+  },
+  "homepage": "https://github.com/dorahacksglobal/hackerlinkbounties#readme",
+  "devDependencies": {
+    "@openzeppelin/contracts-upgradeable": "^4.6.0",
+    "@openzeppelin/contracts": "^4.6.0",
+    "@openzeppelin/test-helpers": "^0.5.15",
+    "@openzeppelin/truffle-upgrades": "^1.15.0",
+    "chai": "^4.3.6",
+    "truffle": "^5.5.13"
+  }
+}
