@@ -6,15 +6,15 @@
 1. Install Dependencies
 `yarn`
 
-1. Start develop
+2. Start develop console
 `yarn develop`
 
-3. Connect your Metamask to locally running Truffle's Network
+3. Migrate
+`truffle(develop)> migrate`  or `yarn migrate`
+
+4. Test
+`truffle(develop)> test` or `yarn test`
+
+5. Connect your Metamask to locally running Truffle's Network
 - Use option, Connect using “Custom RPC”, at address http://127.0.0.1:9545/
 - Use the Private Keys provided by Truffle to import at least two accounts.
-
-4. Migrate
-`truffle(develop)> migrate`
-
-5. Test
-`truffle(develop)> test`
