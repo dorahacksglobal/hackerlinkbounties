@@ -5,7 +5,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-/// @dev A contract for issuing bounties on Ethereum paying in ETH, or ERC20 tokens
+/// @dev A simple contract for issuing bounties on Ethereum paying in ETH, or ERC20 tokens, has no approval mechanism,
+///      so anyone can issue a bounty. It supports multiple bounties, each with a different token, multiple
+///      contributors and multiple fulfillers.
 /// @author Noodles <noodles@dorahacks.com>
 contract DaoBounty is Ownable {
     using SafeMath for uint256;
@@ -16,16 +18,16 @@ contract DaoBounty is Ownable {
 
     struct Bounty {
         address payable issuer; // Who have complete control over the bounty
-        address token; // The address of the token associated with the bounty (should be disregarded if the tokenVersion is 0)
-        uint256 tokenVersion; // The version of the token being used for the bounty (0 for ETH, 20 for ERC20)
+        address tokenAddress; // The address of the token associated with the bounty (0 for ETH, others for ERC20)
         uint256 balance; // The number of tokens which the bounty is able to pay out
         bool hasPaidOut; // A boolean storing whether or not the bounty has paid out all its tokens
-        Contribution[] contributions; // An array of Contributions which store the contributions which have been made to the bounty
+        Record[] contributions; // An array of Contributions which store the contributions which have been made to the bounty
+        Record[] fulfillers; // An array of fulfillers which store the token amount which have been given
     }
 
-    struct Contribution {
-        address payable contributor; // The address of the individual who contributed
-        uint256 amount; // The amount of tokens the user contributed
+    struct Record {
+        address payable account; // The address of the individual who contributed or fulfilled the bounty
+        uint256 amount; // The amount of tokens which have been contributed or given
     }
 
     /*
@@ -33,6 +35,7 @@ contract DaoBounty is Ownable {
      */
 
     uint256 public numBounties; // An integer storing the total number of bounties in the contract
+    mapping(address => bool) public tokenWhitelist; // A mapping of ERC20 token addresses to whether or not they are whitelisted
     mapping(uint256 => Bounty) public bounties; // A mapping of bountyIDs to bounties
 
     bool public callStarted; // Ensures mutex for the entire contract
@@ -41,33 +44,31 @@ contract DaoBounty is Ownable {
      * Modifiers
      */
 
-    modifier senderIsValid(address _sender) {
+    modifier onlyIssuer(uint256 _bountyId) {
         require(
-            msg.sender == _sender || msg.sender == owner(),
-            "Sender is not valid"
+            msg.sender == bounties[_bountyId].issuer,
+            "Only the issuer can perform this action"
         );
         _;
     }
 
-    modifier onlyIssuer(address _sender, uint256 _bountyId) {
-        require(_sender == bounties[_bountyId].issuer);
-        _;
-    }
-
     modifier hasNotPaidOut(uint256 _bountyId) {
-        require(!bounties[_bountyId].hasPaidOut);
+        require(
+            !bounties[_bountyId].hasPaidOut,
+            "Bounty has already been paid out"
+        );
         _;
     }
 
     modifier callNotStarted() {
-        require(!callStarted);
+        require(!callStarted, "Contract is currently being called");
         callStarted = true;
         _;
         callStarted = false;
     }
 
     modifier validateBountyArrayIndex(uint256 _index) {
-        require(_index < numBounties);
+        require(_index < numBounties, "Index out of bounties array bounds");
         _;
     }
 
@@ -76,46 +77,38 @@ contract DaoBounty is Ownable {
      */
 
     /// @dev issueBounty(): creates a new bounty
-    /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the owner)
-    /// @param _issuer who will be the issuer of the bounty
-    /// @param _token the address of the token which will be used for the bounty
-    /// @param _tokenVersion the version of the token being used for the bounty (0 for ETH, 20 for ERC20)
-    function issueBounty(
-        address payable _sender,
-        address payable _issuer,
-        address _token,
-        uint256 _tokenVersion
-    ) public senderIsValid(_sender) returns (uint256) {
-        require(_tokenVersion == 0 || _tokenVersion == 20); // Ensures a bounty can only be issued with a valid token version
+    /// @param _tokenAddress the address of the token which will be used for the bounty
+    function issueBounty(address _tokenAddress) public returns (uint256) {
+        require(
+            _tokenAddress == address(0) ||
+                tokenWhitelist[_tokenAddress] == true,
+            "Token is not whitelisted"
+        ); // Ensures a bounty can only be issued with a valid token address
 
         uint256 bountyId = numBounties; // The next bounty's index will always equal the number of existing bounties
 
         Bounty storage newBounty = bounties[bountyId];
-        newBounty.issuer = _issuer;
-        newBounty.tokenVersion = _tokenVersion;
+        newBounty.issuer = payable(msg.sender);
 
-        if (_tokenVersion != 0) {
-            newBounty.token = _token;
-        }
+        newBounty.tokenAddress = _tokenAddress;
 
         numBounties = numBounties.add(1); // Increments the number of bounties, since a new one has just been added
 
-        emit BountyIssued(bountyId, _sender, _issuer, _token, _tokenVersion);
+        emit BountyIssued(bountyId, newBounty.issuer, _tokenAddress);
 
         return (bountyId);
     }
 
+    /// @dev issueAndContribute(): creates a new bounty and adds a contribution
     /// @param _depositAmount the amount of tokens being deposited to the bounty, which will create a new contribution to the bounty
-    function issueAndContribute(
-        address payable _sender,
-        address payable _issuer,
-        address _token,
-        uint256 _tokenVersion,
-        uint256 _depositAmount
-    ) public payable returns (uint256) {
-        uint256 bountyId = issueBounty(_sender, _issuer, _token, _tokenVersion);
+    function issueAndContribute(address _tokenAddress, uint256 _depositAmount)
+        public
+        payable
+        returns (uint256)
+    {
+        uint256 bountyId = issueBounty(_tokenAddress);
 
-        contribute(_sender, bountyId, _depositAmount);
+        contribute(bountyId, _depositAmount);
 
         return (bountyId);
     }
@@ -123,81 +116,82 @@ contract DaoBounty is Ownable {
     /// @dev contribute(): Allows users to contribute tokens to a given bounty.
     ///                    Contributing merits no privelages to administer the
     ///                    funds in the bounty or accept submissions. Contributions
-    ///                    are NOT refundable , so please be careful!
-    /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the owner)
+    ///                    are NOT refundable, so please be careful!
     /// @param _bountyId the index of the bounty
-    /// @param _amount the amount of tokens being contributed
-    function contribute(
-        address payable _sender,
-        uint256 _bountyId,
-        uint256 _amount
-    )
+    /// @param _depositAmount the amount of tokens being contributed
+    function contribute(uint256 _bountyId, uint256 _depositAmount)
         public
         payable
-        senderIsValid(_sender)
         validateBountyArrayIndex(_bountyId)
         hasNotPaidOut(_bountyId)
         callNotStarted
     {
-        require(_amount > 0); // Contributions of 0 tokens or token ID 0 should fail
+        require(_depositAmount > 0, "Deposit amount should not be zero"); // Contributions of 0 tokens or token ID 0 should fail
 
-        bounties[_bountyId].contributions.push(Contribution(_sender, _amount)); // Adds the contribution to the bounty
-
-        if (bounties[_bountyId].tokenVersion == 0) {
-            require(msg.value == _amount);
-            bounties[_bountyId].balance = bounties[_bountyId].balance.add(
-                _amount
-            ); // Increments the balance of the bounty
-        } else if (bounties[_bountyId].tokenVersion == 20) {
-            require(msg.value == 0); // Ensures users don't accidentally send ETH alongside a token contribution, locking up funds
+        if (bounties[_bountyId].tokenAddress == address(0)) {
             require(
-                IERC20(bounties[_bountyId].token).transferFrom(
-                    _sender,
-                    address(this),
-                    _amount
-                )
+                msg.value == _depositAmount,
+                "Deposit amount should match the amount of ETH sent"
             );
-
-            bounties[_bountyId].balance = bounties[_bountyId].balance.add(
-                _amount
-            ); // Increments the balance of the bounty
         } else {
-            revert();
+            require(
+                msg.value == 0,
+                "Bounty can't be issued in both ETH and ERC20"
+            ); // Ensures users don't accidentally send ETH alongside a token contribution, locking up funds
+            require(
+                IERC20(bounties[_bountyId].tokenAddress).transferFrom(
+                    msg.sender,
+                    address(this),
+                    _depositAmount
+                ),
+                "Failed to transfer tokens"
+            );
         }
+
+        bounties[_bountyId].contributions.push(
+            Record(payable(msg.sender), _depositAmount)
+        ); // Adds the contribution to the bounty
+
+        bounties[_bountyId].balance = bounties[_bountyId].balance.add(
+            _depositAmount
+        ); // Increments the balance of the bounty
 
         emit ContributionAdded(
             _bountyId,
             bounties[_bountyId].contributions.length - 1, // The new contributionId
-            _sender,
-            _amount
+            msg.sender,
+            _depositAmount
         );
     }
 
     /// @dev acceptFulfillment(): Allows issuer to accept a given submission
-    /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the owner)
     /// @param _bountyId the index of the bounty
     /// @param _fulfillers the array of fulfillers to be accepted
     /// @param _tokenAmounts the array of token amounts which will be paid to the
     ///                      fulfillers, whose length should equal the length of the
     ///                      _fulfillers array of the submission.
     function acceptFulfillment(
-        address _sender,
         uint256 _bountyId,
         address payable[] memory _fulfillers,
         uint256[] memory _tokenAmounts
     )
         public
-        senderIsValid(_sender)
         validateBountyArrayIndex(_bountyId)
-        onlyIssuer(_sender, _bountyId)
+        onlyIssuer(_bountyId)
         callNotStarted
     {
-        require(_tokenAmounts.length == _fulfillers.length); // Each fulfiller should get paid some amount of tokens (this can be 0)
+        require(
+            _tokenAmounts.length == _fulfillers.length,
+            "Length of arrays should be equal"
+        ); // Each fulfiller should get paid some amount of tokens (this can be 0)
 
         for (uint256 i = 0; i < _fulfillers.length; i++) {
             if (_tokenAmounts[i] > 0) {
-                // for each fulfiller associated with the submission
-                transferTokens(_bountyId, _fulfillers[i], _tokenAmounts[i]);
+                transferTokens(_bountyId, _fulfillers[i], _tokenAmounts[i]); // Transfers the tokens to the fulfiller
+
+                bounties[_bountyId].fulfillers.push(
+                    Record(_fulfillers[i], _tokenAmounts[i])
+                ); // Adds the fulfillment to the bounty
             }
         }
 
@@ -205,30 +199,19 @@ contract DaoBounty is Ownable {
             bounties[_bountyId].hasPaidOut = true;
         }
 
-        emit FulfillmentAccepted(
-            _sender,
-            _bountyId,
-            _fulfillers,
-            _tokenAmounts
-        );
+        emit FulfillmentAccepted(_bountyId, _fulfillers, _tokenAmounts);
     }
 
-    /// @dev changeBounty(): Allows any of the issuers to change the bounty
-    /// @param _sender the sender of the transaction issuing the bounty (should be the same as msg.sender unless the txn is called by the owner)
+    /// @dev changeBounty(): Allows issuer to change the bounty
     /// @param _bountyId the index of the bounty
-    /// @param _issuer the new array of addresses who will be the issuers of the bounty
-    function changeBounty(
-        address _sender,
-        uint256 _bountyId,
-        address payable _issuer
-    )
+    /// @param _issuer the new address who will be the issuer of the bounty
+    function changeBounty(uint256 _bountyId, address payable _issuer)
         public
-        senderIsValid(_sender)
         validateBountyArrayIndex(_bountyId)
-        onlyIssuer(_sender, _bountyId)
+        onlyIssuer(_bountyId)
     {
         bounties[_bountyId].issuer = _issuer;
-        emit BountyChanged(_bountyId, _sender, _issuer);
+        emit BountyChanged(_bountyId, _issuer);
     }
 
     /// @dev getBounty(): Returns the details of the bounty
@@ -242,31 +225,43 @@ contract DaoBounty is Ownable {
         return bounties[_bountyId];
     }
 
+    /// @dev addToWhitelist(): Add particular address onto whitelist
+    /// @param _tokenAddress the address of the token which will be used for the bounty
+    function addToWhitelist(address _tokenAddress) public onlyOwner {
+        tokenWhitelist[_tokenAddress] = true;
+        emit AddedToWhitelist(_tokenAddress);
+    }
+
+    /// @dev removeFromWhitelist(): Eliminate particular address from whitelist
+    /// @param _tokenAddress the address of the token
+    function removeFromWhitelist(address _tokenAddress) public onlyOwner {
+        tokenWhitelist[_tokenAddress] = false;
+        emit RemovedFromWhitelist(_tokenAddress);
+    }
+
+    /*
+     * Internal functions
+     */
+
     function transferTokens(
         uint256 _bountyId,
         address payable _to,
         uint256 _amount
     ) internal {
-        if (bounties[_bountyId].tokenVersion == 0) {
-            require(_amount > 0); // Sending 0 tokens should throw
-            require(bounties[_bountyId].balance >= _amount);
+        require(_amount > 0, "Amount should not be zero"); // Sending 0 tokens should throw
+        require(
+            bounties[_bountyId].balance >= _amount,
+            "Amount should not be greater than bounty balance"
+        );
 
-            bounties[_bountyId].balance = bounties[_bountyId].balance.sub(
-                _amount
-            );
+        bounties[_bountyId].balance = bounties[_bountyId].balance.sub(_amount);
 
+        if (bounties[_bountyId].tokenAddress == address(0)) {
             _to.transfer(_amount);
-        } else if (bounties[_bountyId].tokenVersion == 20) {
-            require(_amount > 0); // Sending 0 tokens should throw
-            require(bounties[_bountyId].balance >= _amount);
-
-            bounties[_bountyId].balance = bounties[_bountyId].balance.sub(
-                _amount
-            );
-
-            require(IERC20(bounties[_bountyId].token).transfer(_to, _amount));
         } else {
-            revert();
+            require(
+                IERC20(bounties[_bountyId].tokenAddress).transfer(_to, _amount)
+            );
         }
     }
 
@@ -275,30 +270,27 @@ contract DaoBounty is Ownable {
      */
 
     event BountyIssued(
-        uint256 _bountyId,
-        address payable _creator,
+        uint256 indexed _bountyId,
         address payable _issuer,
-        address _token,
-        uint256 _tokenVersion
+        address _tokenAddress
     );
 
     event ContributionAdded(
-        uint256 _bountyId,
+        uint256 indexed _bountyId,
         uint256 _contributionId,
-        address payable _contributor,
+        address _contributor,
         uint256 _amount
     );
 
-    event BountyChanged(
-        uint256 _bountyId,
-        address _changer,
-        address payable _issuer
-    );
-
     event FulfillmentAccepted(
-        address _approver,
-        uint256 _bountyId,
+        uint256 indexed _bountyId,
         address payable[] _fulfillers,
         uint256[] _tokenAmounts
     );
+
+    event BountyChanged(uint256 indexed _bountyId, address payable _newIssuer);
+
+    event AddedToWhitelist(address _tokenAddress);
+
+    event RemovedFromWhitelist(address _tokenAddress);
 }
