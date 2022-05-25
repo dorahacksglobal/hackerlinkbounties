@@ -2,6 +2,7 @@ const { expect } = require("chai");
 
 // Import utilities from Test Helpers
 const { BN, expectEvent, expectRevert } = require("@openzeppelin/test-helpers");
+const { deployProxy, upgradeProxy } = require("@openzeppelin/truffle-upgrades");
 
 // Load compiled artifacts
 const DaoBounty = artifacts.require("DaoBounty");
@@ -20,7 +21,7 @@ contract("DaoBounty", function ([owner, other]) {
   });
 
   beforeEach(async () => {
-    this.bounty = await DaoBounty.new();
+    this.bounty = await deployProxy(DaoBounty);
     console.log("Deployed Bounty ==>", this.bounty.address);
     await this.bounty.addToWhitelist(this.token.address);
   });

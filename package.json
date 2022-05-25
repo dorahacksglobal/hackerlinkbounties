@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "truffle test",
+    "test": "truffle test --stacktrace",
     "compile": "truffle compile",
     "migrate": "truffle migrate",
     "develop": "truffle develop"
@@ -31,6 +31,7 @@
     "@openzeppelin/test-helpers": "^0.5.15",
     "@openzeppelin/truffle-upgrades": "^1.15.0",
     "chai": "^4.3.6",
-    "truffle": "^5.5.13"
+    "truffle": "^5.5.13",
+    "@truffle/hdwallet-provider": "^2.0.8"
   }
 }

@@ -1,5 +1,9 @@
 node_modules
 build
 
+secrets.json
+
+.vscode
+
 # OpenZeppelin
 .openzeppelin/unknown-*.json

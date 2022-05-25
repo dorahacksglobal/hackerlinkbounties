@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
 /// @dev A simple contract for issuing bounties on Ethereum paying in ETH, or ERC20 tokens, has no approval mechanism,
 ///      so anyone can issue a bounty. It supports multiple bounties, each with a different token, multiple
 ///      contributors and multiple fulfillers.
 /// @author Noodles <noodles@dorahacks.com>
-contract DaoBounty is Ownable {
-    using SafeMath for uint256;
+contract DaoBounty is OwnableUpgradeable {
+    using SafeMathUpgradeable for uint256;
 
     /*
      * Structs
@@ -76,6 +76,11 @@ contract DaoBounty is Ownable {
      * Public functions
      */
 
+    /// @dev follow the pattern of OpenZeppelin's upgradeable contracts, define initialize() instead of constructor()
+    function initialize() public initializer {
+        __Ownable_init();
+    }
+
     /// @dev issueBounty(): creates a new bounty
     /// @param _tokenAddress the address of the token which will be used for the bounty
     function issueBounty(address _tokenAddress) public returns (uint256) {
@@ -139,11 +144,8 @@ contract DaoBounty is Ownable {
                 "Bounty can't be issued in both ETH and ERC20"
             ); // Ensures users don't accidentally send ETH alongside a token contribution, locking up funds
             require(
-                IERC20(bounties[_bountyId].tokenAddress).transferFrom(
-                    msg.sender,
-                    address(this),
-                    _depositAmount
-                ),
+                IERC20Upgradeable(bounties[_bountyId].tokenAddress)
+                    .transferFrom(msg.sender, address(this), _depositAmount),
                 "Failed to transfer tokens"
             );
         }
@@ -260,7 +262,10 @@ contract DaoBounty is Ownable {
             _to.transfer(_amount);
         } else {
             require(
-                IERC20(bounties[_bountyId].tokenAddress).transfer(_to, _amount)
+                IERC20Upgradeable(bounties[_bountyId].tokenAddress).transfer(
+                    _to,
+                    _amount
+                )
             );
         }
     }
