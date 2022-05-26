@@ -22,7 +22,7 @@ contract DaoBounty is OwnableUpgradeable {
         uint256 balance; // The number of tokens which the bounty is able to pay out
         bool hasPaidOut; // A boolean storing whether or not the bounty has paid out all its tokens
         Record[] contributions; // An array of Contributions which store the contributions which have been made to the bounty
-        Record[] fulfillers; // An array of fulfillers which store the token amount which have been given
+        Record[] fulfillments; // An array of fulfillments which store the token amount which have been given
     }
 
     struct Record {
@@ -191,7 +191,7 @@ contract DaoBounty is OwnableUpgradeable {
             if (_tokenAmounts[i] > 0) {
                 transferTokens(_bountyId, _fulfillers[i], _tokenAmounts[i]); // Transfers the tokens to the fulfiller
 
-                bounties[_bountyId].fulfillers.push(
+                bounties[_bountyId].fulfillments.push(
                     Record(_fulfillers[i], _tokenAmounts[i])
                 ); // Adds the fulfillment to the bounty
             }
@@ -199,6 +199,7 @@ contract DaoBounty is OwnableUpgradeable {
 
         if (bounties[_bountyId].balance == 0) {
             bounties[_bountyId].hasPaidOut = true;
+            emit BountyPaiedOut(_bountyId);
         }
 
         emit FulfillmentAccepted(_bountyId, _fulfillers, _tokenAmounts);
@@ -279,6 +280,8 @@ contract DaoBounty is OwnableUpgradeable {
         address payable _issuer,
         address _tokenAddress
     );
+
+    event BountyPaiedOut(uint256 indexed _bountyId);
 
     event ContributionAdded(
         uint256 indexed _bountyId,

@@ -1,20 +1,25 @@
 {
   "manifestVersion": "3.2",
   "admin": {
-    "address": "0x6db8baB749B09ab33515CD462b13F424e05DE267",
-    "txHash": "0x99aa3863e09980d821136a86973096ceb5c7f65cd39c9e99a58bff2566a6336e"
+    "address": "0x2eA2FC7bd07eB06B74020CAd8109c0669EA6AbDf",
+    "txHash": "0x5b0ca74d7ed79daf833e3d6cae13426456d0ff77f654547c25f3a3146d8a55d7"
   },
   "proxies": [
     {
-      "address": "0x21C75526aE28f83336820e9DcC36a317499c6B18",
-      "txHash": "0xfe6811f3399bfe84014f3b57c9dd1f841ab12fce122db280a5d81a7912ebbd61",
+      "address": "0x64E7fbED41937218D9B00447A42d140E0da70ddA",
+      "txHash": "0x9c06708efee2eb0630f026411a1698e8721bebe9230a2b70a0d6f0d11fa83458",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x96398724f62baB7FcF46D7ce53e857029efDaf73",
+      "txHash": "0x55283ff23d88466433c1a7ffd6c99fcd1e933f476a27f19d8d6df83ae57f7813",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "ac426456fcd909422390d83d543fff9cb5ade33014c4cc01171dc75fd301106b": {
-      "address": "0x95aD5Fa971c4EF106f8a6dCec2e66e98E0bFa704",
-      "txHash": "0x636e3b82faf6be614a3fe26e7de8a07f16854e6db5479fcc6c29cd983455210f",
+    "a536ef4b4d6de400b4aaa99770662d327c4275ff60a40fddf1fbaee7ffe89e3e": {
+      "address": "0x58F7e608dd670FFa0D313635f6fDF4AdD335319a",
+      "txHash": "0x731278e7671026787d6eea99b92c0188d4f86fb90bad61a3a5964b3eabf0f66d",
       "layout": {
         "storage": [
           {
@@ -63,7 +68,7 @@
           {
             "contract": "DaoBounty",
             "label": "bounties",
-            "type": "t_mapping(t_uint256,t_struct(Bounty)1679_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Bounty)968_storage)",
             "src": "../project:/contracts/DaoBounty.sol:39"
           },
           {
@@ -86,10 +91,10 @@
           "t_bool": {
             "label": "bool"
           },
-          "t_mapping(t_uint256,t_struct(Bounty)1679_storage)": {
+          "t_mapping(t_uint256,t_struct(Bounty)968_storage)": {
             "label": "mapping(uint256 => struct DaoBounty.Bounty)"
           },
-          "t_struct(Bounty)1679_storage": {
+          "t_struct(Bounty)968_storage": {
             "label": "struct DaoBounty.Bounty",
             "members": [
               {
@@ -110,21 +115,21 @@
               },
               {
                 "label": "contributions",
-                "type": "t_array(t_struct(Record)1684_storage)dyn_storage"
+                "type": "t_array(t_struct(Record)973_storage)dyn_storage"
               },
               {
-                "label": "fulfillers",
-                "type": "t_array(t_struct(Record)1684_storage)dyn_storage"
+                "label": "fulfillments",
+                "type": "t_array(t_struct(Record)973_storage)dyn_storage"
               }
             ]
           },
           "t_address_payable": {
             "label": "address payable"
           },
-          "t_array(t_struct(Record)1684_storage)dyn_storage": {
+          "t_array(t_struct(Record)973_storage)dyn_storage": {
             "label": "struct DaoBounty.Record[]"
           },
-          "t_struct(Record)1684_storage": {
+          "t_struct(Record)973_storage": {
             "label": "struct DaoBounty.Record",
             "members": [
               {
