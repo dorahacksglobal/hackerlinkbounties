@@ -1,5 +1,7 @@
-# DAO Bounty 合约
-需求文档：https://fi193tzrws.larksuite.com/docs/docusFKhOaaeS890u3nVelzBRXg
+# DAO Bounty Contract
+
+Requirements
+https://fi193tzrws.larksuite.com/docs/docusFKhOaaeS890u3nVelzBRXg
 
 ## Setting up your project
 
