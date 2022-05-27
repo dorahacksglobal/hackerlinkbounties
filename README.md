@@ -21,6 +21,26 @@ https://fi193tzrws.larksuite.com/docs/docusFKhOaaeS890u3nVelzBRXg
 - Use option, Connect using “Custom RPC”, at address http://127.0.0.1:9545/
 - Use the Private Keys provided by Truffle to import at least two accounts.
 
+## Upgrade migration example
+
+`./migrations/3_upgrade.js`
+
+```js
+const { upgradeProxy } = require("@openzeppelin/truffle-upgrades");
+
+const DaoBounty = artifacts.require("DaoBounty");
+const DaoBountyV2 = artifacts.require("DaoBountyV2");
+
+module.exports = async function (deployer) {
+  const bounty = await DaoBounty.deployed();
+  const instance = await upgradeProxy(bounty.address, DaoBountyV2, {
+    deployer,
+  });
+  console.log("Upgraded", instance.address);
+};
+
+```
+
 ## BSC-TESTNET
 ```
 $ truffle console --network bsc-testnet
