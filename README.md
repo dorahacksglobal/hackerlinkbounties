@@ -304,3 +304,122 @@ truffle(bsc-testnet)> bounty.getBounty(0)
   ]
 ]
 ```
+
+## RINKEBY
+```
+$ npx truffle console --network rinkeby
+truffle(rinkeby)> migrate
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+Starting migrations...
+======================
+> Network name:    'rinkeby'
+> Network id:      4
+> Block gas limit: 30000000 (0x1c9c380)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0xe0b0ae9158d75eefe074402df32e4e26c7dfe4205ba775e0f7012db5d2138d02
+   > Blocks: 1            Seconds: 18
+   > contract address:    0xc3C58cF7480f93F9386AC950D4F96099D96313Ff
+   > block number:        10748364
+   > block timestamp:     1653643256
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             1.999374614993495996
+   > gas used:            250154 (0x3d12a)
+   > gas price:           2.500000026 gwei
+   > value sent:          0 ETH
+   > total cost:          0.000625385006504004 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10748365)
+   > confirmation number: 2 (block: 10748366)
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.000625385006504004 ETH
+
+
+2_deploy.js
+===========
+
+   Deploying 'DaoBounty'
+   ---------------------
+   > transaction hash:    0x1d6114340dd7c9452c60e1d9705fdeb6507419dabf025b88c1c039c3955b4f5a
+   > Blocks: 1            Seconds: 18
+   > contract address:    0x95aD5Fa971c4EF106f8a6dCec2e66e98E0bFa704
+   > block number:        10748369
+   > block timestamp:     1653643331
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             1.992312352425744189
+   > gas used:            2778992 (0x2a6770)
+   > gas price:           2.500000024 gwei
+   > value sent:          0 ETH
+   > total cost:          0.006947480066695808 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10748370)
+   > confirmation number: 2 (block: 10748371)
+
+   Deploying 'ProxyAdmin'
+   ----------------------
+   > transaction hash:    0x9cd5c80a27d1321f4986fb83edd718a8f1e77f1435a3b4abb3c093b85ee473b5
+   > Blocks: 2            Seconds: 22
+   > contract address:    0x6db8baB749B09ab33515CD462b13F424e05DE267
+   > block number:        10748373
+   > block timestamp:     1653643391
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             1.991102302414127709
+   > gas used:            484020 (0x762b4)
+   > gas price:           2.500000024 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00121005001161648 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10748374)
+   > confirmation number: 2 (block: 10748375)
+
+   Deploying 'TransparentUpgradeableProxy'
+   ---------------------------------------
+   > transaction hash:    0x74fa843360ccf458f9ff70f4937c070631eac2eb1abd0131ade2ed65da064628
+   > Blocks: 2            Seconds: 18
+   > contract address:    0x21C75526aE28f83336820e9DcC36a317499c6B18
+   > block number:        10748377
+   > block timestamp:     1653643451
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             1.989491779899955111
+   > gas used:            644209 (0x9d471)
+   > gas price:           2.500000022 gwei
+   > value sent:          0 ETH
+   > total cost:          0.001610522514172598 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 10748378)
+   > confirmation number: 2 (block: 10748379)
+Deployed 0x21C75526aE28f83336820e9DcC36a317499c6B18
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.009768052592484886 ETH
+
+Summary
+=======
+> Total deployments:   4
+> Final cost:          0.01039343759898889 ETH
+```
