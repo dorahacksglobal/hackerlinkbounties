@@ -199,7 +199,7 @@ contract DaoBounty is OwnableUpgradeable {
 
         if (bounties[_bountyId].balance == 0) {
             bounties[_bountyId].hasPaidOut = true;
-            emit BountyPaiedOut(_bountyId);
+            emit BountyPaidOut(_bountyId);
         }
 
         emit FulfillmentAccepted(_bountyId, _fulfillers, _tokenAmounts);
@@ -281,7 +281,7 @@ contract DaoBounty is OwnableUpgradeable {
         address _tokenAddress
     );
 
-    event BountyPaiedOut(uint256 indexed _bountyId);
+    event BountyPaidOut(uint256 indexed _bountyId);
 
     event ContributionAdded(
         uint256 indexed _bountyId,
