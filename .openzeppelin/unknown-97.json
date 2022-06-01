@@ -14,6 +14,11 @@
       "address": "0x96398724f62baB7FcF46D7ce53e857029efDaf73",
       "txHash": "0x55283ff23d88466433c1a7ffd6c99fcd1e933f476a27f19d8d6df83ae57f7813",
       "kind": "transparent"
+    },
+    {
+      "address": "0xE51567308ED28D4a3A75675a54EB8C72C88cDC88",
+      "txHash": "0x73fa444e3d6e1948894109ff75128672a10199b028863590ef02df5a51368e28",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -130,6 +135,143 @@
             "label": "struct DaoBounty.Record[]"
           },
           "t_struct(Record)973_storage": {
+            "label": "struct DaoBounty.Record",
+            "members": [
+              {
+                "label": "account",
+                "type": "t_address_payable"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          }
+        }
+      }
+    },
+    "4345045dc0b671dd0fc514c112c27af7f5316892d50e0042033f0bf704ee0dfb": {
+      "address": "0x193e0A1b3884c0861FC71b8508E5de89832F9a22",
+      "txHash": "0x1867c04d13ed1338094f77d21f79ca23ca4408b13eb40d1389fbbfc71fae8530",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:67"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:36"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:87"
+          },
+          {
+            "contract": "DaoBounty",
+            "label": "numBounties",
+            "type": "t_uint256",
+            "src": "../project:/contracts/DaoBounty.sol:37"
+          },
+          {
+            "contract": "DaoBounty",
+            "label": "tokenWhitelist",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "../project:/contracts/DaoBounty.sol:38"
+          },
+          {
+            "contract": "DaoBounty",
+            "label": "bounties",
+            "type": "t_mapping(t_uint256,t_struct(Bounty)1679_storage)",
+            "src": "../project:/contracts/DaoBounty.sol:39"
+          },
+          {
+            "contract": "DaoBounty",
+            "label": "callStarted",
+            "type": "t_bool",
+            "src": "../project:/contracts/DaoBounty.sol:41"
+          }
+        ],
+        "types": {
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_uint256,t_struct(Bounty)1679_storage)": {
+            "label": "mapping(uint256 => struct DaoBounty.Bounty)"
+          },
+          "t_struct(Bounty)1679_storage": {
+            "label": "struct DaoBounty.Bounty",
+            "members": [
+              {
+                "label": "issuer",
+                "type": "t_address_payable"
+              },
+              {
+                "label": "tokenAddress",
+                "type": "t_address"
+              },
+              {
+                "label": "balance",
+                "type": "t_uint256"
+              },
+              {
+                "label": "hasPaidOut",
+                "type": "t_bool"
+              },
+              {
+                "label": "contributions",
+                "type": "t_array(t_struct(Record)1684_storage)dyn_storage"
+              },
+              {
+                "label": "fulfillments",
+                "type": "t_array(t_struct(Record)1684_storage)dyn_storage"
+              }
+            ]
+          },
+          "t_address_payable": {
+            "label": "address payable"
+          },
+          "t_array(t_struct(Record)1684_storage)dyn_storage": {
+            "label": "struct DaoBounty.Record[]"
+          },
+          "t_struct(Record)1684_storage": {
             "label": "struct DaoBounty.Record",
             "members": [
               {

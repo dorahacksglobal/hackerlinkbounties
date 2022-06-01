@@ -120,6 +120,18 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+
+    mumbai: {
+      provider: () =>
+        new HDWalletProvider(
+          mnemonic,
+          `https://matic-mumbai.chainstacklabs.com`
+        ),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
   },
 
   // Set default mocha options here, use special reporters etc.

@@ -43,8 +43,7 @@ module.exports = async function (deployer) {
 
 ## BSC-TESTNET
 ```
-$ truffle console --network bsc-testnet
-
+✗ npx truffle console --network bsc-testnet
 truffle(bsc-testnet)> migrate --reset
 
 Compiling your contracts...
@@ -62,15 +61,15 @@ Starting migrations...
 1_initial_migration.js
 ======================
 
-   Replacing 'Migrations'
+   Deploying 'Migrations'
    ----------------------
-   > transaction hash:    0x3ffc38020d6cb427c584a734adc49da4db632300b7bae636c42e263df641e552
-   > Blocks: 4            Seconds: 14
-   > contract address:    0xF11540c5195d3cA4Bda2440BE49fe8Fac7f27080
-   > block number:        19649054
-   > block timestamp:     1653587044
+   > transaction hash:    0xfea67167e8f60be21b83f46df6bffbd6fc3c1c081d1f0811a4d5a2c44390a1a6
+   > Blocks: 5            Seconds: 14
+   > contract address:    0xE35C93dD1879859E24f621e961818D78E86c4918
+   > block number:        19804080
+   > block timestamp:     1654052702
    > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
-   > balance:             0.009712579999999999
+   > balance:             0.296931009999999998
    > gas used:            248854 (0x3cc16)
    > gas price:           10 gwei
    > value sent:          0 ETH
@@ -79,7 +78,7 @@ Starting migrations...
    Pausing for 2 confirmations...
 
    -------------------------------
-   > confirmation number: 2 (block: 19649059)
+   > confirmation number: 2 (block: 19804085)
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
@@ -89,15 +88,34 @@ Starting migrations...
 2_deploy.js
 ===========
 
+   Deploying 'DaoBounty'
+   ---------------------
+   > transaction hash:    0x1867c04d13ed1338094f77d21f79ca23ca4408b13eb40d1389fbbfc71fae8530
+   > Blocks: 4            Seconds: 14
+   > contract address:    0x193e0A1b3884c0861FC71b8508E5de89832F9a22
+   > block number:        19804098
+   > block timestamp:     1654052756
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             0.268716079999999998
+   > gas used:            2778980 (0x2a6764)
+   > gas price:           10 gwei
+   > value sent:          0 ETH
+   > total cost:          0.0277898 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 2 (block: 19804103)
+
    Deploying 'TransparentUpgradeableProxy'
    ---------------------------------------
-   > transaction hash:    0x55283ff23d88466433c1a7ffd6c99fcd1e933f476a27f19d8d6df83ae57f7813
-   > Blocks: 6            Seconds: 18
-   > contract address:    0x96398724f62baB7FcF46D7ce53e857029efDaf73
-   > block number:        19649077
-   > block timestamp:     1653587113
+   > transaction hash:    0x73fa444e3d6e1948894109ff75128672a10199b028863590ef02df5a51368e28
+   > Blocks: 5            Seconds: 14
+   > contract address:    0xE51567308ED28D4a3A75675a54EB8C72C88cDC88
+   > block number:        19804112
+   > block timestamp:     1654052798
    > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
-   > balance:             0.002834359999999999
+   > balance:             0.262262989999999998
    > gas used:            645309 (0x9d8bd)
    > gas price:           10 gwei
    > value sent:          0 ETH
@@ -106,24 +124,22 @@ Starting migrations...
    Pausing for 2 confirmations...
 
    -------------------------------
-   > confirmation number: 1 (block: 19649081)
-   > confirmation number: 3 (block: 19649083)
-Deployed 0x96398724f62baB7FcF46D7ce53e857029efDaf73
+   > confirmation number: 1 (block: 19804116)
+   > confirmation number: 3 (block: 19804118)
+Deployed 0xE51567308ED28D4a3A75675a54EB8C72C88cDC88
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:          0.00645309 ETH
+   > Total cost:          0.03424289 ETH
 
 Summary
 =======
-> Total deployments:   2
-> Final cost:          0.00894163 ETH
+> Total deployments:   3
+> Final cost:          0.03673143 ETH
 
+truffle(bsc-testnet)> exec scripts/index.js
+Using network 'bsc-testnet'.
 
-truffle(bsc-testnet)> accounts = await web3.eth.getAccounts();
-undefined
-
-truffle(bsc-testnet)> accounts
 [
   '0x0dad1D5e11A921373516dA4C93bE439b33E71cC8',
   '0x46E862372D29A958d2690feC84263eFc0857f2BB',
@@ -136,132 +152,40 @@ truffle(bsc-testnet)> accounts
   '0x5f3666A6cb87eB85b70512c8065A2d2b9a28b3cF',
   '0x742f18f8028039b195c08F13c95Bc70478a23b21'
 ]
-
-truffle(bsc-testnet)> bounty = await DaoBounty.deployed()
-undefined
-
-truffle(bsc-testnet)> bounty.address
-'0x96398724f62baB7FcF46D7ce53e857029efDaf73'
-
-truffle(bsc-testnet)> bounty.issueBounty('0x0000000000000000000000000000000000000000')
-{
-  tx: '0x85325c3ef0ee1000e6b20fbdc970e41737f74be3f16ba09086a92244b01e96f9',
+issueBountyRs {
+  tx: '0x3b28ddad948862c69374a79f187a4fddb9c1a288ef1fbbde020f5189f9228364',
   receipt: {
-    blockHash: '0x901e37bbc2e08ef6c75f23c74bafb62eb5f742677c3044d9f8364c591dd082c8',
-    blockNumber: 19649343,
+    blockHash: '0x3ee30f3b82da628802e226ae6e609e4a067c886905237ca3731e1eab0b755f1a',
+    blockNumber: 19804184,
     contractAddress: null,
-    cumulativeGasUsed: 331504,
+    cumulativeGasUsed: 128448,
     from: '0x0dad1d5e11a921373516da4c93be439b33e71cc8',
     gasUsed: 72132,
     logs: [ [Object] ],
-    logsBloom: '0x00000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000040000800000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000',
+    logsBloom: '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000040000000000000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000040000000000000000000000000000000000000000000000000000000',
     status: true,
-    to: '0x96398724f62bab7fcf46d7ce53e857029efdaf73',
-    transactionHash: '0x85325c3ef0ee1000e6b20fbdc970e41737f74be3f16ba09086a92244b01e96f9',
-    transactionIndex: 5,
-    type: '0x0',
-    rawLogs: [ [Object] ]
-  },
-  logs: [
-    {
-      address: '0x96398724f62baB7FcF46D7ce53e857029efDaf73',
-      blockNumber: 19649343,
-      transactionHash: '0x85325c3ef0ee1000e6b20fbdc970e41737f74be3f16ba09086a92244b01e96f9',
-      transactionIndex: 5,
-      blockHash: '0x901e37bbc2e08ef6c75f23c74bafb62eb5f742677c3044d9f8364c591dd082c8',
-      logIndex: 2,
-      removed: false,
-      id: 'log_a441d780',
-      event: 'BountyIssued',
-      args: [Result]
-    }
-  ]
-}
-
-truffle(bsc-testnet)> bounty.contribute(0,1,{value:1})
-{
-  tx: '0x3ee670de5df413f13bb11a5dd45667d861c0eafb748f509d3a1d1bb94b1b9c9d',
-  receipt: {
-    blockHash: '0x0bf2b3547ec5defee29930cee2047df39dbab97fcb6307437a194f7b0577a39a',
-    blockNumber: 19649372,
-    contractAddress: null,
-    cumulativeGasUsed: 282405,
-    from: '0x0dad1d5e11a921373516da4c93be439b33e71cc8',
-    gasUsed: 118352,
-    logs: [ [Object] ],
-    logsBloom: '0x00000000000000000000000000000000002000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000020000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000080000000000000000000',
-    status: true,
-    to: '0x96398724f62bab7fcf46d7ce53e857029efdaf73',
-    transactionHash: '0x3ee670de5df413f13bb11a5dd45667d861c0eafb748f509d3a1d1bb94b1b9c9d',
+    to: '0xe51567308ed28d4a3a75675a54eb8c72c88cdc88',
+    transactionHash: '0x3b28ddad948862c69374a79f187a4fddb9c1a288ef1fbbde020f5189f9228364',
     transactionIndex: 2,
     type: '0x0',
     rawLogs: [ [Object] ]
   },
   logs: [
     {
-      address: '0x96398724f62baB7FcF46D7ce53e857029efDaf73',
-      blockNumber: 19649372,
-      transactionHash: '0x3ee670de5df413f13bb11a5dd45667d861c0eafb748f509d3a1d1bb94b1b9c9d',
+      address: '0xE51567308ED28D4a3A75675a54EB8C72C88cDC88',
+      blockNumber: 19804184,
+      transactionHash: '0x3b28ddad948862c69374a79f187a4fddb9c1a288ef1fbbde020f5189f9228364',
       transactionIndex: 2,
-      blockHash: '0x0bf2b3547ec5defee29930cee2047df39dbab97fcb6307437a194f7b0577a39a',
-      logIndex: 1,
-      removed: false,
-      id: 'log_76fe450e',
-      event: 'ContributionAdded',
-      args: [Result]
-    }
-  ]
-}
-
-truffle(bsc-testnet)> bounty.acceptFulfillment(0, [accounts[1],], [1,])
-{
-  tx: '0xba02a308aaf08e524b5ca87bdd024651d7a2cf467bb2de16b87886f97893b0df',
-  receipt: {
-    blockHash: '0x6d098618e88d08c1a0d82b6353dad2cbc44930e7389698539f2832d444199198',
-    blockNumber: 19649422,
-    contractAddress: null,
-    cumulativeGasUsed: 153536,
-    from: '0x0dad1d5e11a921373516da4c93be439b33e71cc8',
-    gasUsed: 123484,
-    logs: [ [Object], [Object] ],
-    logsBloom: '0x00000000000000000000000000000000200000000800000000000000000000000000000010000000000000000004000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000040000000000000000000040000000000000000000000000000000000000000000000000000000000000000000000000100000000000000020000000000000000000000000000000000000000000000000000000000000000000',
-    status: true,
-    to: '0x96398724f62bab7fcf46d7ce53e857029efdaf73',
-    transactionHash: '0xba02a308aaf08e524b5ca87bdd024651d7a2cf467bb2de16b87886f97893b0df',
-    transactionIndex: 1,
-    type: '0x0',
-    rawLogs: [ [Object], [Object] ]
-  },
-  logs: [
-    {
-      address: '0x96398724f62baB7FcF46D7ce53e857029efDaf73',
-      blockNumber: 19649422,
-      transactionHash: '0xba02a308aaf08e524b5ca87bdd024651d7a2cf467bb2de16b87886f97893b0df',
-      transactionIndex: 1,
-      blockHash: '0x6d098618e88d08c1a0d82b6353dad2cbc44930e7389698539f2832d444199198',
+      blockHash: '0x3ee30f3b82da628802e226ae6e609e4a067c886905237ca3731e1eab0b755f1a',
       logIndex: 0,
       removed: false,
-      id: 'log_d61bba1f',
-      event: 'BountyPaiedOut',
-      args: [Result]
-    },
-    {
-      address: '0x96398724f62baB7FcF46D7ce53e857029efDaf73',
-      blockNumber: 19649422,
-      transactionHash: '0xba02a308aaf08e524b5ca87bdd024651d7a2cf467bb2de16b87886f97893b0df',
-      transactionIndex: 1,
-      blockHash: '0x6d098618e88d08c1a0d82b6353dad2cbc44930e7389698539f2832d444199198',
-      logIndex: 1,
-      removed: false,
-      id: 'log_7832e848',
-      event: 'FulfillmentAccepted',
+      id: 'log_89f05c27',
+      event: 'BountyIssued',
       args: [Result]
     }
   ]
 }
-
-truffle(bsc-testnet)> bounty.getBounty(0)
-[
+getBountyRs [
   '0x0dad1D5e11A921373516dA4C93bE439b33E71cC8',
   '0x0000000000000000000000000000000000000000',
   '0',
@@ -422,4 +346,123 @@ Summary
 =======
 > Total deployments:   4
 > Final cost:          0.01039343759898889 ETH
+```
+
+## Mumbai
+```
+✗ npx truffle console --network mumbai
+truffle(mumbai)> migrate
+
+Compiling your contracts...
+===========================
+> Everything is up to date, there is nothing to compile.
+
+
+Starting migrations...
+======================
+> Network name:    'mumbai'
+> Network id:      80001
+> Block gas limit: 20000000 (0x1312d00)
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0xd9b2d2bd9db890541bb325631185bf58e411569f0da255733a63776814f2aacf
+   > Blocks: 1            Seconds: 9
+   > contract address:    0xc3C58cF7480f93F9386AC950D4F96099D96313Ff
+   > block number:        26545404
+   > block timestamp:     1654022714
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             0.099374614997748614
+   > gas used:            250154 (0x3d12a)
+   > gas price:           2.500000009 gwei
+   > value sent:          0 ETH
+   > total cost:          0.000625385002251386 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 26545406)
+   > confirmation number: 2 (block: 26545407)
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.000625385002251386 ETH
+
+
+2_deploy.js
+===========
+
+   Deploying 'DaoBounty'
+   ---------------------
+   > transaction hash:    0x268feea0afd59ed580698e3026a95ab8893ed8bc93e30eeed4fff0b1fabcbaf6
+   > Blocks: 3            Seconds: 13
+   > contract address:    0x95aD5Fa971c4EF106f8a6dCec2e66e98E0bFa704
+   > block number:        26545414
+   > block timestamp:     1654022765
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             0.092312382472324577
+   > gas used:            2778980 (0x2a6764)
+   > gas price:           2.500000009 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00694745002501082 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 26545416)
+   > confirmation number: 2 (block: 26545417)
+
+   Deploying 'ProxyAdmin'
+   ----------------------
+   > transaction hash:    0x496bb21445186cfd520040d7222aef96c3c5a07a1bb8f792f539789c5a380a02
+   > Blocks: 2            Seconds: 9
+   > contract address:    0x6db8baB749B09ab33515CD462b13F424e05DE267
+   > block number:        26545420
+   > block timestamp:     1654022795
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             0.091102332467968397
+   > gas used:            484020 (0x762b4)
+   > gas price:           2.500000009 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00121005000435618 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 26545422)
+   > confirmation number: 2 (block: 26545423)
+
+   Deploying 'TransparentUpgradeableProxy'
+   ---------------------------------------
+   > transaction hash:    0xfbb093c36dba8159636629c8f737a36f8cac87cdd7b355926d0623500fb9efbb
+   > Blocks: 1            Seconds: 9
+   > contract address:    0x21C75526aE28f83336820e9DcC36a317499c6B18
+   > block number:        26545427
+   > block timestamp:     1654022830
+   > account:             0x0dad1D5e11A921373516dA4C93bE439b33E71cC8
+   > balance:             0.089491809961526307
+   > gas used:            644209 (0x9d471)
+   > gas price:           2.50000001 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00161052250644209 ETH
+
+   Pausing for 2 confirmations...
+
+   -------------------------------
+   > confirmation number: 1 (block: 26545429)
+   > confirmation number: 2 (block: 26545430)
+Deployed 0x21C75526aE28f83336820e9DcC36a317499c6B18
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.00976802253580909 ETH
+
+Summary
+=======
+> Total deployments:   4
+> Final cost:          0.010393407538060476 ETH
 ```
