@@ -7,6 +7,27 @@ module.exports = async function main(callback) {
     const DaoBounty = artifacts.require("DaoBounty");
     const bounty = await DaoBounty.deployed();
 
+    // bsc-testnet TestToken
+    if ((network_id = 97)) {
+      const bscTestnetTokenAddress =
+        "0xd4b13907a34db5ba3f95d27596d5b03842cec34b";
+      await bounty.addToWhitelist(bscTestnetTokenAddress);
+      const bscTestnetTokenAddressWhitelist = await bounty.tokenWhitelist(
+        bscTestnetTokenAddress
+      );
+      console.log({ bscTestnetTokenAddressWhitelist });
+    }
+
+    // mumbai TestToken
+    if ((network_id = 80001)) {
+      const mumbaiTokenAddress = "0x21240d5e5a6556d0ccb93685902122e9ac284c4f";
+      await bounty.addToWhitelist(mumbaiTokenAddress);
+      const mumbaiTokenAddressWhitelist = await bounty.tokenWhitelist(
+        mumbaiTokenAddress
+      );
+      console.log({ mumbaiTokenAddressWhitelist });
+    }
+
     let issueBountyRs = await bounty.issueBounty(
       "0x0000000000000000000000000000000000000000"
     );
