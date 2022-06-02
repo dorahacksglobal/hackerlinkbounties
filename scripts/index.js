@@ -1,5 +1,6 @@
 module.exports = async function main(callback) {
   try {
+    const network = this.artifacts.options.network;
     // Retrieve accounts from the local node
     const accounts = await web3.eth.getAccounts();
     console.log(accounts);
@@ -8,7 +9,7 @@ module.exports = async function main(callback) {
     const bounty = await DaoBounty.deployed();
 
     // bsc-testnet TestToken
-    if (network_id === 97) {
+    if (network === "bsc-testnet") {
       const bscTestnetTokenAddress =
         "0xd4b13907a34db5ba3f95d27596d5b03842cec34b";
       await bounty.addToWhitelist(bscTestnetTokenAddress);
@@ -19,7 +20,7 @@ module.exports = async function main(callback) {
     }
 
     // mumbai TestToken
-    if (network_id === 80001) {
+    if (network === "mumbai") {
       const mumbaiTokenAddress = "0x21240d5e5a6556d0ccb93685902122e9ac284c4f";
       await bounty.addToWhitelist(mumbaiTokenAddress);
       const mumbaiTokenAddressWhitelist = await bounty.tokenWhitelist(
