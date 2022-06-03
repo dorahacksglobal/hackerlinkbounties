@@ -8,37 +8,42 @@ module.exports = async function main(callback) {
     const DaoBounty = artifacts.require("DaoBounty");
     const bounty = await DaoBounty.deployed();
 
+    console.log("Contract Address:", bounty.address);
+
+    let tokenAddress = "0x0000000000000000000000000000000000000000";
+
     // bsc-testnet TestToken
     if (network === "bsc-testnet") {
-      const bscTestnetTokenAddress =
-        "0xd4b13907a34db5ba3f95d27596d5b03842cec34b";
-      await bounty.addToWhitelist(bscTestnetTokenAddress);
-      const bscTestnetTokenAddressWhitelist = await bounty.tokenWhitelist(
-        bscTestnetTokenAddress
-      );
-      console.log({ bscTestnetTokenAddressWhitelist });
+      tokenAddress = "0xd4b13907a34db5ba3f95d27596d5b03842cec34b";
     }
 
     // mumbai TestToken
     if (network === "mumbai") {
-      const mumbaiTokenAddress = "0x21240d5e5a6556d0ccb93685902122e9ac284c4f";
-      await bounty.addToWhitelist(mumbaiTokenAddress);
-      const mumbaiTokenAddressWhitelist = await bounty.tokenWhitelist(
-        mumbaiTokenAddress
-      );
-      console.log({ mumbaiTokenAddressWhitelist });
+      tokenAddress = "0x21240d5e5a6556d0ccb93685902122e9ac284c4f";
     }
 
-    let issueBountyRs = await bounty.issueBounty(
-      "0x0000000000000000000000000000000000000000"
-    );
+    const isErc20 = web3.utils.toBN(tokenAddress).toString() !== "0";
+
+    console.log("Token Address:", tokenAddress, "ERC20:", isErc20);
+
+    await bounty.addToWhitelist(tokenAddress);
+    const tokenAddressWhitelist = await bounty.tokenWhitelist(tokenAddress);
+    console.log({ tokenAddressWhitelist });
+
+    let issueBountyRs = await bounty.issueBounty(tokenAddress);
     console.log("issueBountyRs", issueBountyRs);
 
-    await bounty.contribute(0, 1, { value: 1 });
+    const bountyIssuedLog = issueBountyRs.logs.filter(
+      (log) => log.event === "BountyIssued"
+    )[0];
 
-    await bounty.acceptFulfillment(0, [accounts[1]], [1]);
+    const bountyId = bountyIssuedLog.args._bountyId;
 
-    const getBountyRs = await bounty.getBounty(0);
+    await bounty.contribute(bountyId, 1, { value: isErc20 ? 0 : 1 });
+
+    await bounty.acceptFulfillment(bountyId, [accounts[1]], [1]);
+
+    const getBountyRs = await bounty.getBounty(bountyId);
     console.log("getBountyRs", getBountyRs);
 
     callback(0);
