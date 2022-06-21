@@ -24,7 +24,8 @@
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const { alchemyApiKey, infuraApiKey, mnemonic } = require("./secrets.json");
+const { infuraApiKey, mnemonic, privateKeys } = require("./secrets.json");
+const account = mnemonic || privateKeys
 
 module.exports = {
   /**
@@ -91,7 +92,7 @@ module.exports = {
     ropsten: {
       provider: () =>
         new HDWalletProvider(
-          mnemonic,
+          account,
           `https://ropsten.infura.io/v3/${infuraApiKey}`
         ),
       network_id: 3, // Ropsten's id
@@ -101,12 +102,19 @@ module.exports = {
       skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
     },
 
+    kovan: {
+      provider: () => 
+        new HDWalletProvider(
+          account,
+          `https://kovan.infura.io/v3/${infuraApiKey}`
+        ),
+      network_id: 42,
+      skipDryRun: true,
+    },
+
     "bsc-testnet": {
       provider: () =>
-        new HDWalletProvider(
-          mnemonic,
-          `https://data-seed-prebsc-1-s1.binance.org:8545`
-        ),
+        new HDWalletProvider(account, 'https://data-seed-prebsc-1-s1.binance.org:8545'),
       network_id: 97,
       confirmations: 2,
       timeoutBlocks: 200,
@@ -114,23 +122,31 @@ module.exports = {
     },
     bsc: {
       provider: () =>
-        new HDWalletProvider(mnemonic, `https://bsc-dataseed1.binance.org`),
+        new HDWalletProvider(account, `https://bsc-dataseed1.binance.org`),
       network_id: 56,
-      confirmations: 10,
-      timeoutBlocks: 200,
       skipDryRun: true,
     },
 
     mumbai: {
       provider: () =>
         new HDWalletProvider(
-          mnemonic,
+          account,
           `https://matic-mumbai.chainstacklabs.com`
         ),
       network_id: 80001,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
+    },
+    polygon: {
+      provider: () => 
+        new HDWalletProvider(
+          account,
+          'https://polygon-rpc.com/'
+        ),
+      network_id: 137,
+      skipDryRun: true,
+      gasPrice: 50000000000,
     },
   },
 

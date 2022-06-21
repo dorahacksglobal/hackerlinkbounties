@@ -4,6 +4,7 @@ build
 secrets.json
 
 .vscode
+.DS_STORE
 
 # OpenZeppelin
 .openzeppelin/unknown-1337.json

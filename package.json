@@ -26,12 +26,12 @@
   },
   "homepage": "https://github.com/dorahacksglobal/hackerlinkbounties#readme",
   "devDependencies": {
-    "@openzeppelin/contracts-upgradeable": "^4.6.0",
     "@openzeppelin/contracts": "^4.6.0",
+    "@openzeppelin/contracts-upgradeable": "^4.6.0",
     "@openzeppelin/test-helpers": "^0.5.15",
     "@openzeppelin/truffle-upgrades": "^1.15.0",
+    "@truffle/hdwallet-provider": "^2.0.8",
     "chai": "^4.3.6",
-    "truffle": "^5.5.13",
-    "@truffle/hdwallet-provider": "^2.0.8"
+    "truffle": "^5.5.13"
   }
 }
