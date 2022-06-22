@@ -122,7 +122,7 @@ module.exports = {
     },
     bsc: {
       provider: () =>
-        new HDWalletProvider(account, `https://bsc-dataseed1.binance.org`),
+        new HDWalletProvider(account, 'https://bsc-dataseed2.defibit.io/'),
       network_id: 56,
       skipDryRun: true,
     },
