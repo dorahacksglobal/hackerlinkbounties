@@ -1,0 +1,9 @@
+[package]
+name = "Hello"
+version = "0.0.1"
+
+[addresses]
+hello = "_"
+
+[dependencies]
+AptosFramework = { local = "~/workspace/aptos-core/aptos-move/framework/aptos-framework" }
