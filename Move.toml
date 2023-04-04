@@ -1,9 +1,9 @@
 [package]
-name = "Hello"
+name = "DAOBounty"
 version = "0.0.1"
 
 [addresses]
-hello = "_"
+dao_bounty = "_"
 
 [dependencies]
-AptosFramework = { local = "~/workspace/aptos-core/aptos-move/framework/aptos-framework" }
+AptosFramework = { local = "../aptos-core/aptos-move/framework/aptos-framework" }
