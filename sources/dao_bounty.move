@@ -11,13 +11,20 @@ module dao_bounty::bounty {
     use aptos_framework::account;
     use aptos_framework::coin;
 
-    const ERR_PERMISSION_DENIED: u64 = 1000;
+    const ERR_ONLY_ISSUER: u64 = 1000;
+    const ERR_HAS_PAID_OUT: u64 = 1001;
+    const ERR_INDEX_VALIDATION_FAILED: u64 = 1002;
+    const ERR_OWNER_ONLY: u64 = 1003;
+    const ERR_HAS_INITIALIZED: u64 = 1004;
+    const ERR_AMOUNT_GREATER_THAN_ZERO: u64 = 1005;
+    const ERR_COIN_TYPE_MISMATCH: u64 = 1006;
+    const ERR_FULFILLERS_AMOUNTS_MISMATCH: u64 = 1007;
+    const ERR_BALANCE_NOT_ENOUGH: u64 = 1008;
 
     struct Data has key {
         admin: address,
         bounty_numbers: u64,
         bounties: Table<u64, Bounty>,
-        started: bool,
         bounty_events: event::EventHandle<BountyEvent>,
         contribution_events: event::EventHandle<ContributionEvent>,
         fulfillment_events: event::EventHandle<FulfillmentEvent>,
@@ -70,7 +77,7 @@ module dao_bounty::bounty {
         
         assert!(
             sender_address == bounty.issuer,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_ONLY_ISSUER),
         );
     }
 
@@ -79,15 +86,7 @@ module dao_bounty::bounty {
         let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
         assert!(
             !bounty.has_paid_out,
-            error::permission_denied(ERR_PERMISSION_DENIED),
-        );
-    }
-
-    public fun call_not_started() acquires Data {
-        let data = borrow_global_mut<Data>(@dao_bounty);
-        assert!(
-            !data.started,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_HAS_PAID_OUT),
         );
     }
 
@@ -95,7 +94,7 @@ module dao_bounty::bounty {
         let numbers = get_bounties_number();
         assert!(
             index < numbers,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_INDEX_VALIDATION_FAILED),
         );
     }
     // end of check functions
@@ -145,11 +144,11 @@ module dao_bounty::bounty {
         let owner_addr = signer::address_of(owner);
         assert!(
             @dao_bounty == owner_addr,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_OWNER_ONLY),
         );
         assert!(
             !exists<Data>(@dao_bounty), 
-            error::already_exists(ERR_PERMISSION_DENIED),
+            error::already_exists(ERR_HAS_INITIALIZED),
         );
         move_to(
             owner,
@@ -157,7 +156,6 @@ module dao_bounty::bounty {
                 admin,
                 bounty_numbers: 0,
                 bounties: table::new(),
-                started: false,
                 bounty_events: account::new_event_handle<BountyEvent>(owner),
                 contribution_events: account::new_event_handle<ContributionEvent>(owner),
                 fulfillment_events: account::new_event_handle<FulfillmentEvent>(owner),
@@ -203,7 +201,7 @@ module dao_bounty::bounty {
     ) acquires Data, Escrow {
         assert!(
             deposit_amount > 0,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_AMOUNT_GREATER_THAN_ZERO),
         );
 
         let data = borrow_global_mut<Data>(@dao_bounty);
@@ -211,7 +209,7 @@ module dao_bounty::bounty {
         let coin_type = type_info::type_name<CoinType>();
         assert!(
             bounty.coin_type == coin_type,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_COIN_TYPE_MISMATCH),
         );
 
         let escrow_coin = coin::withdraw<CoinType>(issuer, deposit_amount);
@@ -248,10 +246,9 @@ module dao_bounty::bounty {
     ) acquires Data, Escrow {
         validate_bounty_array_index(bounty_id);
         only_issuer(issuer, bounty_id);
-        call_not_started();
         assert!(
             vector::length(&fulfillers) == vector::length(&amounts),
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_FULFILLERS_AMOUNTS_MISMATCH),
         );
 
         let data = borrow_global_mut<Data>(@dao_bounty);
@@ -259,7 +256,7 @@ module dao_bounty::bounty {
         let coin_type = type_info::type_name<CoinType>();
         assert!(
             bounty.coin_type == coin_type,
-            error::permission_denied(ERR_PERMISSION_DENIED),
+            error::permission_denied(ERR_COIN_TYPE_MISMATCH),
         );
 
         let escrow_coin = borrow_global_mut<Escrow<CoinType>>(bounty.escrow_address);
@@ -269,8 +266,8 @@ module dao_bounty::bounty {
             let fulfiller = *vector::borrow(&fulfillers, i);
             let amount = *vector::borrow(&amounts, i);
 
-            assert!(amount > 0, error::permission_denied(ERR_PERMISSION_DENIED));
-            assert!(bounty.balance >= amount, error::permission_denied(ERR_PERMISSION_DENIED));
+            assert!(amount > 0, error::permission_denied(ERR_AMOUNT_GREATER_THAN_ZERO));
+            assert!(bounty.balance >= amount, error::permission_denied(ERR_BALANCE_NOT_ENOUGH));
 
             bounty.balance = bounty.balance - amount;
             let coin = coin::extract<CoinType>(&mut escrow_coin.coin, amount);
