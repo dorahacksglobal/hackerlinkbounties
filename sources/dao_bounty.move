@@ -1,9 +1,12 @@
 module dao_bounty::bounty {
 
+    use std::bcs;
     use std::error;
     use std::signer;
+    use std::string;
     use std::vector;
     use aptos_std::event;
+    use aptos_std::type_info;
     use aptos_std::table::{Self, Table};
     use aptos_framework::account;
     use aptos_framework::coin;
@@ -26,6 +29,8 @@ module dao_bounty::bounty {
         has_paid_out: bool,
         contributions: vector<Record>,
         fulfillers: vector<Record>,
+        escrow_address: address,
+        coin_type: string::String,
     }
 
     struct Record has store, drop {
@@ -87,7 +92,7 @@ module dao_bounty::bounty {
     }
 
     public fun validate_bounty_array_index(index: u64) acquires Data {
-        let numbers = get_bounty_numbers();
+        let numbers = get_bounties_number();
         assert!(
             index < numbers,
             error::permission_denied(ERR_PERMISSION_DENIED),
@@ -96,10 +101,6 @@ module dao_bounty::bounty {
     // end of check functions
 
     // start of normal functions
-    public fun get_bounty_numbers(): u64 acquires Data {
-        *&borrow_global<Data>(@dao_bounty).bounty_numbers
-    }
-
     fun merge_coin<CoinType>(
         resource: address,
         coin: coin::Coin<CoinType>
@@ -108,23 +109,34 @@ module dao_bounty::bounty {
         coin::merge(&mut escrow.coin, coin);
     }
 
-    // #[test_only]
+    public fun get_bounties_number(): u64 acquires Data {
+        *&borrow_global<Data>(@dao_bounty).bounty_numbers
+    }
+
+    #[test_only]
     public fun get_admin_address(): address acquires Data {
         *&borrow_global<Data>(@dao_bounty).admin
     }
 
-    // #[test_only]
+    #[test_only]
     public fun get_bounty_issuer(bounty_id: u64): address acquires Data {
         let data = borrow_global_mut<Data>(@dao_bounty);
         let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
         *&bounty.issuer
     }
 
-    // #[test_only]
-    public fun get_contributor_number(bounty_id: u64): u64 acquires Data {
+    #[test_only]
+    public fun get_contributors_number(bounty_id: u64): u64 acquires Data {
         let data = borrow_global_mut<Data>(@dao_bounty);
         let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
         vector::length(&bounty.contributions)
+    }
+
+    #[test_only]
+    public fun get_bounty_balance<CoinType>(bounty_id: u64): u64 acquires Data {
+        let data = borrow_global_mut<Data>(@dao_bounty);
+        let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
+        bounty.balance
     }
     // end of normal functions
 
@@ -153,17 +165,30 @@ module dao_bounty::bounty {
         );
     }
 
-    public entry fun issue_bounty(issuer: &signer) acquires Data {
+    public entry fun issue_bounty<CoinType>(issuer: &signer) acquires Data {
         let data = borrow_global_mut<Data>(@dao_bounty);
         let bounty_id = data.bounty_numbers;
         let issuer_address = signer::address_of(issuer);
         data.bounty_numbers = data.bounty_numbers + 1;
+        let coin_type = type_info::type_name<CoinType>();
+        let seed = *string::bytes(&coin_type);
+        vector::append(&mut seed, bcs::to_bytes(&bounty_id));
+        let (resource, _signer_cap) = account::create_resource_account(issuer, seed);
+
+        move_to(
+            &resource,
+            Escrow<CoinType> {
+                coin: coin::zero<CoinType>()
+            }
+        );
         table::upsert(&mut data.bounties, bounty_id, Bounty {
             issuer: issuer_address,
             balance: 0,
             has_paid_out: false,
             contributions: vector::empty(),
             fulfillers: vector::empty(),
+            escrow_address: signer::address_of(&resource),
+            coin_type,
         });
         event::emit_event(&mut data.bounty_events, BountyEvent {
             bounty_id,
@@ -183,8 +208,14 @@ module dao_bounty::bounty {
 
         let data = borrow_global_mut<Data>(@dao_bounty);
         let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
+        let coin_type = type_info::type_name<CoinType>();
+        assert!(
+            bounty.coin_type == coin_type,
+            error::permission_denied(ERR_PERMISSION_DENIED),
+        );
+
         let escrow_coin = coin::withdraw<CoinType>(issuer, deposit_amount);
-        merge_coin<CoinType>(@dao_bounty, escrow_coin);
+        merge_coin<CoinType>(bounty.escrow_address, escrow_coin);
         let record = Record {
             account: signer::address_of(issuer),
             amount: deposit_amount,
@@ -204,8 +235,8 @@ module dao_bounty::bounty {
         issuer: &signer,
         deposit_amount: u64
     ) acquires Data, Escrow {
-        issue_bounty(issuer);
-        let bounty_id = get_bounty_numbers() - 1;
+        issue_bounty<CoinType>(issuer);
+        let bounty_id = get_bounties_number() - 1;
         contribute<CoinType>(issuer, bounty_id, deposit_amount);
     }
 
@@ -225,6 +256,13 @@ module dao_bounty::bounty {
 
         let data = borrow_global_mut<Data>(@dao_bounty);
         let bounty = table::borrow_mut(&mut data.bounties, bounty_id);
+        let coin_type = type_info::type_name<CoinType>();
+        assert!(
+            bounty.coin_type == coin_type,
+            error::permission_denied(ERR_PERMISSION_DENIED),
+        );
+
+        let escrow_coin = borrow_global_mut<Escrow<CoinType>>(bounty.escrow_address);
         let length = vector::length(&fulfillers);
         let i = 0;
         while (i < length){
@@ -232,12 +270,11 @@ module dao_bounty::bounty {
             let amount = *vector::borrow(&amounts, i);
 
             assert!(amount > 0, error::permission_denied(ERR_PERMISSION_DENIED));
-            assert!(bounty.balance > amount, error::permission_denied(ERR_PERMISSION_DENIED));
+            assert!(bounty.balance >= amount, error::permission_denied(ERR_PERMISSION_DENIED));
+
             bounty.balance = bounty.balance - amount;
-            let escrow_coin = borrow_global_mut<Escrow<CoinType>>(@dao_bounty);
             let coin = coin::extract<CoinType>(&mut escrow_coin.coin, amount);
             coin::deposit<CoinType>(fulfiller, coin);
-
             vector::push_back(
                 &mut bounty.fulfillers,
                 Record {
