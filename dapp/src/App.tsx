@@ -1,6 +1,12 @@
+import { AptosClient } from 'aptos';
 import React from 'react';
 
-const CONTRACT_ADDRESS = '0x2f234d8d4abb8a97adf9d049498efe2a65e37e4f3809eded3b030f9209a88d9a'
+const CONTRACT_ADDRESS = '0x34b5c42623e9c82cad073e7e6dc40cf6e69d04b74505777d11f89103a176cae'
+
+const APTOS_PROVIDER_URL = 'https://fullnode.testnet.aptoslabs.com'
+const client = new AptosClient(APTOS_PROVIDER_URL)
+
+
 
 function App() {
   const wallet = window.aptos
@@ -30,6 +36,7 @@ function App() {
   }
 
   const [bountyId, setBountyId] = React.useState<number>(0);
+  const [newBountyId, setNewBountyId] = React.useState<number>(0);
   const [hunterAddress, setHunterAddress] = React.useState<string>('');
   const [amount, setAmount] = React.useState<number>(0);
 
@@ -47,6 +54,25 @@ function App() {
     }
     const result = await wallet.signAndSubmitTransaction(transaction)
     console.log(result)
+  }
+
+  const getBountyBalance = async (bountyId: number) => {
+    // 先根据合约地址请求到资源数据，拿到数据标识 handle
+    const resource = await client.getAccountResource(
+      CONTRACT_ADDRESS, `${CONTRACT_ADDRESS}::bounty::Data`)
+    const { bounties }: any = resource.data
+    const { handle }: any = bounties
+    // 构造具体的请求参数
+    const params = {
+      key: bountyId.toString(),
+      key_type: 'u64',
+      value_type: `${CONTRACT_ADDRESS}::bounty::Bounty`,
+    }
+    const tableItem = await client.getTableItem(handle, params)
+    const rawBalance = tableItem.balance
+    const balance = rawBalance / 100000000
+    const message = `Bounty ${bountyId} has ${balance} Aptos and the raw balance is ${rawBalance}`
+    alert(message)
   }
 
   return (
@@ -74,6 +100,12 @@ function App() {
         <input type="number" value={amount} onChange={e => setAmount(parseInt(e.target.value))} />
         <br />
         <button onClick={acceptFulfillment}>Accept Fulfillment</button>
+      </div>
+      <div className='Check balance' style={{ border: '1px solid blue', margin: '20px 20px' }}>
+        <label>Bounty ID:</label>
+        <input type="number" value={newBountyId} onChange={e => setNewBountyId(parseInt(e.target.value))} />
+        <br />
+        <button onClick={() => getBountyBalance(newBountyId)}>Check Balance</button>
       </div>
     </div>
   );
