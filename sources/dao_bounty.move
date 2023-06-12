@@ -10,6 +10,7 @@ module dao_bounty::bounty {
     use aptos_std::table::{Self, Table};
     use aptos_framework::account;
     use aptos_framework::coin;
+    use aptos_framework::aptos_account;
 
     const ERR_ONLY_ISSUER: u64 = 1000;
     const ERR_HAS_PAID_OUT: u64 = 1001;
@@ -271,7 +272,7 @@ module dao_bounty::bounty {
 
             bounty.balance = bounty.balance - amount;
             let coin = coin::extract<CoinType>(&mut escrow_coin.coin, amount);
-            coin::deposit<CoinType>(fulfiller, coin);
+            aptos_account::deposit_coins<CoinType>(fulfiller, coin);
             vector::push_back(
                 &mut bounty.fulfillers,
                 Record {

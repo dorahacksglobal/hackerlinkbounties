@@ -139,8 +139,8 @@ module dao_bounty::bounty_tests {
         let fulfiller2_address = signer::address_of(fulfiller2);
         setup_aptos(
             &aptos_framework,
-            vector<address>[owner_address, admin_address, issuer_address, fulfiller1_address, fulfiller2_address],
-            vector<u64>[0, 0, 20000, 0, 0]
+            vector<address>[owner_address, admin_address, issuer_address],
+            vector<u64>[0, 0, 20000]
         );
 
         bounty::initialize(owner, admin_address);
@@ -156,16 +156,11 @@ module dao_bounty::bounty_tests {
         let bounty_balance = bounty::get_bounty_balance<AptosCoin>(bounty_id);
         assert!(bounty_balance == 10000, 1);
 
-        let fulfiller1_balance = coin::balance<AptosCoin>(fulfiller1_address);
-        let fulfiller2_balance = coin::balance<AptosCoin>(fulfiller2_address);
-        assert!(fulfiller1_balance == 0, 1);
-        assert!(fulfiller2_balance == 0, 1);
-
         let fulfillers = vector<address>[fulfiller1_address, fulfiller2_address];
         let amounts = vector<u64>[3000, 7000];
         bounty::accept_fulfillment<AptosCoin>(issuer, bounty_id, fulfillers, amounts);
-        fulfiller1_balance = coin::balance<AptosCoin>(fulfiller1_address);
-        fulfiller2_balance = coin::balance<AptosCoin>(fulfiller2_address);
+        let fulfiller1_balance = coin::balance<AptosCoin>(fulfiller1_address);
+        let fulfiller2_balance = coin::balance<AptosCoin>(fulfiller2_address);
         assert!(fulfiller1_balance == 3000, 1);
         assert!(fulfiller2_balance == 7000, 1);
         bounty_balance = bounty::get_bounty_balance<AptosCoin>(bounty_id);
