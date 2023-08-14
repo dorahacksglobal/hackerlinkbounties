@@ -148,8 +148,7 @@ impl DBContract<'_> {
             .bounty_count
             .may_load(deps.storage)?
             .unwrap_or_default();
-        let bounty_id = count + 1;
-        self.bounty_count.save(deps.storage, &bounty_id)?;
+        self.bounty_count.save(deps.storage, &(count + 1))?;
 
         let bounty = Bounty {
             issuer: info.sender,
@@ -163,7 +162,7 @@ impl DBContract<'_> {
 
         let resp = Response::new()
             .add_attribute("action", "issue_bounty")
-            .add_event(Event::new("issue_bounty").add_attribute("id", bounty_id.to_string()));
+            .add_event(Event::new("issue_bounty").add_attribute("id", count.to_string()));
         Ok(resp)
     }
 

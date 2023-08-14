@@ -66,15 +66,15 @@ eval dorad tx wasm store artifacts/daobounty-aarch64.wasm --from=$(echo $DORA_AD
 
 
 ```
-dorad query tx E3729753FAE416AE1D670992C506B6D1BF7C269AB42AEA22B2C0D26928501DB5 --node $NODE
+dorad query tx 9F4224C51815382D58AC3464FD308A4DB6D79C8A150CF41681E095B67B95C0E8 --node $NODE
 ```
 
 ```
-dorad tx wasm instantiate 27 '{"admins":["dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"]}' --no-admin --label=DaobountyTestInstance --from=dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr --node $NODE --chain-id doravota-devnet --gas-prices 0.1uDORA --gas auto --gas-adjustment 1.5
+dorad tx wasm instantiate 28 '{"admins":["dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"]}' --no-admin --label=DaobountyTestInstance --from=dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr --node $NODE --chain-id doravota-devnet --gas-prices 0.1uDORA --gas auto --gas-adjustment 1.5
 ```
 
 ```
-dorad query wasm list-contract-by-code 27 --node ${NODE}
+dorad query wasm list-contract-by-code 28 --node ${NODE}
 ```
 
-dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k
+dora1rqf9dzpsd384txpkunq3dgpqqr5kdpmxmgkz86gugqj03jxnuvrqflaauk

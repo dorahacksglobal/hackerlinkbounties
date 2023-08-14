@@ -1,0 +1,520 @@
+Address: dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3
+With client, chain id: doravota-devnet , height: 632287
+Admin balances: [ { denom: 'uDORA', amount: '19995900' } ]
+Faucet Tx: {
+  height: 500379,
+  txIndex: 0,
+  hash: '40AACE3950400FF61B359B23558CDD9ACC68A63BD5F99F8EC062C3A47C3B918D',
+  code: 0,
+  events: [
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'message', attributes: [Array] }
+  ],
+  rawLog: '[{"msg_index":0,"events":[{"type":"message","attributes":[{"key":"action","value":"/cosmos.bank.v1beta1.MsgSend"},{"key":"sender","value":"dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"},{"key":"module","value":"bank"}]},{"type":"coin_spent","attributes":[{"key":"spender","value":"dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"},{"key":"amount","value":"1000uDORA"}]},{"type":"coin_received","attributes":[{"key":"receiver","value":"dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"},{"key":"amount","value":"1000uDORA"}]},{"type":"transfer","attributes":[{"key":"recipient","value":"dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"},{"key":"sender","value":"dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"},{"key":"amount","value":"1000uDORA"}]},{"type":"message","attributes":[{"key":"sender","value":"dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr"}]}]}]',
+  tx: Uint8Array(314) [
+     10, 140,   1,  10, 137,   1,  10,  28,  47,  99, 111, 115,
+    109, 111, 115,  46,  98,  97, 110, 107,  46, 118,  49,  98,
+    101, 116,  97,  49,  46,  77, 115, 103,  83, 101, 110, 100,
+     18, 105,  10,  43, 100, 111, 114,  97,  49, 110, 116,  52,
+    101, 108, 118, 114, 116,  99,  56, 121, 103,  55,  55,  50,
+    104,  57, 117,  50,  52, 102, 117, 115, 118,  55,  56,  99,
+     50, 119, 118,  57, 122, 118,  48, 122, 117, 115, 114,  18,
+     43, 100, 111, 114,  97,  49, 107, 119,  53, 113, 102, 110,
+    114, 120, 107,  57,
+    ... 214 more items
+  ],
+  msgResponses: [
+    {
+      typeUrl: '/cosmos.bank.v1beta1.MsgSendResponse',
+      value: Uint8Array(0) []
+    }
+  ],
+  gasUsed: 60793,
+  gasWanted: 63474
+}
+DecodedTx: {
+  body: {
+    messages: [ [Object] ],
+    memo: '',
+    timeoutHeight: Long { low: 0, high: 0, unsigned: true },
+    extensionOptions: [],
+    nonCriticalExtensionOptions: []
+  },
+  authInfo: {
+    signerInfos: [ [Object] ],
+    fee: { amount: [Array], gasLimit: [Long], payer: '', granter: '' },
+    tip: undefined
+  },
+  signatures: [
+    Uint8Array(64) [
+       34,  24, 138, 251, 213, 158, 177, 136,  25,  43, 150,
+      196,  82, 252, 134,  27,   5, 195, 169, 229, 197, 122,
+        0, 141,  54,  84, 191,  53,  92,  40,  76, 222,  51,
+      120, 230,  13, 156,  36,  53, 220, 220,  77, 243,   1,
+       22,  14, 235, 120, 183, 122, 118,  12, 231, 244,  36,
+       15, 124,  60,  29,  49, 110, 234, 146,  13
+    ]
+  ]
+}
+Decoded messages: [
+  {
+    typeUrl: '/cosmos.bank.v1beta1.MsgSend',
+    value: Uint8Array(105) [
+       10,  43, 100, 111, 114,  97,  49, 110, 116,  52, 101, 108,
+      118, 114, 116,  99,  56, 121, 103,  55,  55,  50, 104,  57,
+      117,  50,  52, 102, 117, 115, 118,  55,  56,  99,  50, 119,
+      118,  57, 122, 118,  48, 122, 117, 115, 114,  18,  43, 100,
+      111, 114,  97,  49, 107, 119,  53, 113, 102, 110, 114, 120,
+      107,  57, 115, 119,  53, 103,  99, 121, 107,  51, 101, 109,
+      107, 116, 119, 116,  99,  97,  57,  52, 101,  53,  97,  52,
+      100,  97, 117,  56, 121,  51,  26,  13,  10,   5, 117,  68,
+       79,  82,  65,  18,
+      ... 5 more items
+    ]
+  }
+]
+Sent message: {
+  fromAddress: 'dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr',
+  toAddress: 'dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3',
+  amount: [ { denom: 'uDORA', amount: '1000' } ]
+}
+Faucet balances: [ { denom: 'uDORA', amount: '978057435' } ]
+Gas fee: [ { denom: 'uDORA', amount: '6348' } ]
+Gas limit: 63474
+With signing client, chain id: doravota-devnet , height: 632287
+Admin balance before: [ { denom: 'uDORA', amount: '19995900' } ]
+Recipient balance before: [ { denom: 'uDORA', amount: '978057435' } ]
+Issue bounty result: {
+  logs: [ { msg_index: 0, log: '', events: [Array] } ],
+  height: 632288,
+  transactionHash: 'AA83F7A7D16B40A377270853B6A8A7B213FAB83A3F7FE07EFB494608EE307238',
+  events: [
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'execute', attributes: [Array] },
+    { type: 'wasm', attributes: [Array] },
+    { type: 'wasm-issue_bounty', attributes: [Array] }
+  ],
+  gasWanted: 200000,
+  gasUsed: 121452
+}
+Bounty: {
+  issuer: 'dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3',
+  donation_denom: 'uDORA',
+  balance: '0',
+  paid_out: false
+}
+Contribute result: {
+  logs: [ { msg_index: 0, log: '', events: [Array] } ],
+  height: 632289,
+  transactionHash: 'EC3579DC937E01963D7C8EBBBD20942D41ABFD4B56EFF16D85971466ED45E6B7',
+  events: [
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'execute', attributes: [Array] },
+    { type: 'wasm', attributes: [Array] },
+    { type: 'wasm-contribute', attributes: [Array] }
+  ],
+  gasWanted: 200000,
+  gasUsed: 143332
+}
+Bounty: {
+  issuer: 'dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3',
+  donation_denom: 'uDORA',
+  balance: '200',
+  paid_out: false
+}
+Issue and contribute result: {
+  logs: [ { msg_index: 0, log: '', events: [Array] } ],
+  height: 632290,
+  transactionHash: '91169620D8EC6019A84147E2B3E4A89ADB8EBCEA26E26A837AA4184C74709DEE',
+  events: [
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'tx', attributes: [Array] },
+    { type: 'message', attributes: [Array] },
+    { type: 'coin_spent', attributes: [Array] },
+    { type: 'coin_received', attributes: [Array] },
+    { type: 'transfer', attributes: [Array] },
+    { type: 'execute', attributes: [Array] },
+    { type: 'wasm', attributes: [Array] },
+    { type: 'wasm-issue_bounty', attributes: [Array] },
+    { type: 'wasm-contribute', attributes: [Array] }
+  ],
+  gasWanted: 200000,
+  gasUsed: 152840
+}
+{
+  "logs": [
+    {
+      "msg_index": 0,
+      "log": "",
+      "events": [
+        {
+          "type": "message",
+          "attributes": [
+            {
+              "key": "action",
+              "value": "/cosmwasm.wasm.v1.MsgExecuteContract"
+            },
+            {
+              "key": "sender",
+              "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+            },
+            {
+              "key": "module",
+              "value": "wasm"
+            }
+          ]
+        },
+        {
+          "type": "coin_spent",
+          "attributes": [
+            {
+              "key": "spender",
+              "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+            },
+            {
+              "key": "amount",
+              "value": "200uDORA"
+            }
+          ]
+        },
+        {
+          "type": "coin_received",
+          "attributes": [
+            {
+              "key": "receiver",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            },
+            {
+              "key": "amount",
+              "value": "200uDORA"
+            }
+          ]
+        },
+        {
+          "type": "transfer",
+          "attributes": [
+            {
+              "key": "recipient",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            },
+            {
+              "key": "sender",
+              "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+            },
+            {
+              "key": "amount",
+              "value": "200uDORA"
+            }
+          ]
+        },
+        {
+          "type": "execute",
+          "attributes": [
+            {
+              "key": "_contract_address",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            }
+          ]
+        },
+        {
+          "type": "wasm",
+          "attributes": [
+            {
+              "key": "_contract_address",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            },
+            {
+              "key": "action",
+              "value": "issue_bounty"
+            },
+            {
+              "key": "action",
+              "value": "contribute"
+            }
+          ]
+        },
+        {
+          "type": "wasm-issue_bounty",
+          "attributes": [
+            {
+              "key": "_contract_address",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            },
+            {
+              "key": "id",
+              "value": "2"
+            }
+          ]
+        },
+        {
+          "type": "wasm-contribute",
+          "attributes": [
+            {
+              "key": "_contract_address",
+              "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+            },
+            {
+              "key": "id",
+              "value": "1"
+            },
+            {
+              "key": "address",
+              "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+            },
+            {
+              "key": "amount",
+              "value": "200"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "height": 632290,
+  "transactionHash": "91169620D8EC6019A84147E2B3E4A89ADB8EBCEA26E26A837AA4184C74709DEE",
+  "events": [
+    {
+      "type": "coin_spent",
+      "attributes": [
+        {
+          "key": "spender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "amount",
+          "value": "20uDORA"
+        }
+      ]
+    },
+    {
+      "type": "coin_received",
+      "attributes": [
+        {
+          "key": "receiver",
+          "value": "dora17xpfvakm2amg962yls6f84z3kell8c5lnrxdut"
+        },
+        {
+          "key": "amount",
+          "value": "20uDORA"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "attributes": [
+        {
+          "key": "recipient",
+          "value": "dora17xpfvakm2amg962yls6f84z3kell8c5lnrxdut"
+        },
+        {
+          "key": "sender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "amount",
+          "value": "20uDORA"
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "attributes": [
+        {
+          "key": "sender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        }
+      ]
+    },
+    {
+      "type": "tx",
+      "attributes": [
+        {
+          "key": "fee",
+          "value": "20uDORA"
+        },
+        {
+          "key": "fee_payer",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        }
+      ]
+    },
+    {
+      "type": "tx",
+      "attributes": [
+        {
+          "key": "acc_seq",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3/17"
+        }
+      ]
+    },
+    {
+      "type": "tx",
+      "attributes": [
+        {
+          "key": "signature",
+          "value": "fPyOIuDdiL4T1p8SNzCZSpOf+7bk+l1jwxZTlSt+xMFmdIq4F9V3/c3ZKh5xzFnq2xgtZCVe4PVYdzENJZUt0A=="
+        }
+      ]
+    },
+    {
+      "type": "message",
+      "attributes": [
+        {
+          "key": "action",
+          "value": "/cosmwasm.wasm.v1.MsgExecuteContract"
+        },
+        {
+          "key": "sender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "module",
+          "value": "wasm"
+        }
+      ]
+    },
+    {
+      "type": "coin_spent",
+      "attributes": [
+        {
+          "key": "spender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "amount",
+          "value": "200uDORA"
+        }
+      ]
+    },
+    {
+      "type": "coin_received",
+      "attributes": [
+        {
+          "key": "receiver",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        },
+        {
+          "key": "amount",
+          "value": "200uDORA"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "attributes": [
+        {
+          "key": "recipient",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        },
+        {
+          "key": "sender",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "amount",
+          "value": "200uDORA"
+        }
+      ]
+    },
+    {
+      "type": "execute",
+      "attributes": [
+        {
+          "key": "_contract_address",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        }
+      ]
+    },
+    {
+      "type": "wasm",
+      "attributes": [
+        {
+          "key": "_contract_address",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        },
+        {
+          "key": "action",
+          "value": "issue_bounty"
+        },
+        {
+          "key": "action",
+          "value": "contribute"
+        }
+      ]
+    },
+    {
+      "type": "wasm-issue_bounty",
+      "attributes": [
+        {
+          "key": "_contract_address",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        },
+        {
+          "key": "id",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "type": "wasm-contribute",
+      "attributes": [
+        {
+          "key": "_contract_address",
+          "value": "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k"
+        },
+        {
+          "key": "id",
+          "value": "1"
+        },
+        {
+          "key": "address",
+          "value": "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"
+        },
+        {
+          "key": "amount",
+          "value": "200"
+        }
+      ]
+    }
+  ],
+  "gasWanted": 200000,
+  "gasUsed": 152840
+}
+Bounty: {
+  issuer: 'dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3',
+  donation_denom: 'uDORA',
+  balance: '200',
+  paid_out: false
+}

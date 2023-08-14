@@ -70,49 +70,53 @@ const recipient = "dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr";
 
     const cosmWasmClient = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet)
 
-    const contract = new DaobaountyClient(cosmWasmClient, "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3", "dora1k8pms0ywhsa0kjvkxqx434atqd5dh6w54k0gr8j45ra36q02py5sdnwm47");
+    const contract = new DaobaountyClient(cosmWasmClient, "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3", "dora1tfu3rl685mn4erw6z8ra2wh2q7g9d2lpxgzw6dq7gnmpvp4z7lvqv2zd7k");
 
 
-    const res = await contract.issueBounty({
-        donationDenom: 'uDORA',
-    }, {
-        amount: [{ denom: "uDORA", amount: "20" }],
-        gas: "200000",
-    },)
-    console.log("Issue bounty result:", res)
+    // const res = await contract.issueBounty({
+    //     donationDenom: 'uDORA',
+    // }, {
+    //     amount: [{ denom: "uDORA", amount: "20" }],
+    //     gas: "200000",
+    // },)
+    // console.log("Issue bounty result:", res)
 
-    contract.getBounty({
-        bountyId: 0
-    }).then((res) => {
-        console.log("Bounty:", res)
-    })
+    // contract.getBounty({
+    //     bountyId: 0
+    // }).then((res) => {
+    //     console.log("Bounty:", res)
+    // })
 
-    const res2 = await contract.contribute({
-        amount: "200",
-        bountyId: 0,
-    }, {
-        amount: [{ denom: "uDORA", amount: "20" }],
-        gas: "200000",
-    }, undefined, [{ denom: "uDORA", amount: "200" }])
-    console.log("Contribute result:", res2)
+    // const res2 = await contract.contribute({
+    //     amount: "200",
+    //     bountyId: 0,
+    // }, {
+    //     amount: [{ denom: "uDORA", amount: "20" }],
+    //     gas: "200000",
+    // }, undefined, [{ denom: "uDORA", amount: "200" }])
+    // console.log("Contribute result:", res2)
 
-    contract.getBounty({
-        bountyId: 0
-    }).then((res) => {
-        console.log("Bounty:", res)
-    })
+    // contract.getBounty({
+    //     bountyId: 0
+    // }).then((res) => {
+    //     console.log("Bounty:", res)
+    // })
 
-    const res3 = await contract.issueAndContribute({amount: "200", donationDenom: "uDORA"}, {
+    const res3 = await contract.issueAndContribute({ amount: "200", donationDenom: "uDORA" }, {
         amount: [{ denom: "uDORA", amount: "20" }],
         gas: "200000",
     }, undefined, [{ denom: "uDORA", amount: "200" }])
     console.log("Issue and contribute result:", res3)
+    console.log(JSON.stringify(res3, null, 2))
+
+    const issueBountyEvent = res3.events.filter(e => e.type === 'wasm-issue_bounty')[0]
+    console.log("Issue bounty event:", issueBountyEvent)
+    const { value: bountyId } = issueBountyEvent.attributes.filter((e: any) => e.key === 'id')[0] as any
 
     contract.getBounty({
-        bountyId: 1.
+        bountyId: parseInt(bountyId)
     }).then((res) => {
         console.log("Bounty:", res)
-    }
-    )
+    })
 
 })();
