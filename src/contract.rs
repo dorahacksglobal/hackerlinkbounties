@@ -324,14 +324,22 @@ impl DBContract<'_> {
                         "fulfillers",
                         format!(
                             "{:?}",
-                            fulfillers.iter().map(|x| x.to_string()).collect::<String>()
+                            fulfillers
+                                .iter()
+                                .map(|x| x.to_string())
+                                .collect::<Vec<String>>()
+                                .join(",")
                         ),
                     )
                     .add_attribute(
                         "amounts",
                         format!(
                             "{:?}",
-                            amounts.iter().map(|x| x.to_string()).collect::<String>()
+                            amounts
+                                .iter()
+                                .map(|x| x.to_string())
+                                .collect::<Vec<String>>()
+                                .join(",")
                         ),
                     ),
             ))

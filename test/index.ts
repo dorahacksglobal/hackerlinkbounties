@@ -101,7 +101,7 @@ const recipient = "dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr";
   const contract = new DaobaountyClient(
     signingCosmWasmClient,
     "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3",
-    "dora1kjvyqf4mttwrhfuq5gfj9xgxx9jdt92xnxzf770x853567ymx8csw8xkhp"
+    "dora14uu78aa4xswpr5v85umx9znswvemqqcht6a8amjnhzsxj4w8xs3s6qppjr"
   );
 
   // const res = await contract.issueBounty({
@@ -155,7 +155,7 @@ const recipient = "dora1nt4elvrtc8yg772h9u24fusv78c2wv9zv0zusr";
 
   const res4 = await contract.acceptFulfillment(
     {
-      amounts: ["100", "200"],
+      amounts: ["100", "100"],
       bountyId: parseInt(bountyId),
       fulfillers: [recipient, "dora1kw5qfnrxk9sw5gcyk3emktwtca94e5a4dau8y3"],
     },
