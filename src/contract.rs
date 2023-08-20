@@ -4,8 +4,7 @@
 //! License: Apache-2.0
 
 use cosmwasm_std::{
-    coins, Addr, BankMsg, Empty, Event, Order, Response, StdError,
-    StdResult, Uint128,
+    coins, Addr, BankMsg, Empty, Event, Order, Response, StdError, StdResult, Uint128,
 };
 use cw_storage_plus::{Item, Map};
 
@@ -36,6 +35,9 @@ pub enum ContractError {
 
     #[error("expected {expected} but got {actual}")]
     InvalidAmount { expected: u128, actual: u128 },
+
+    #[error("balance is not enough")]
+    NotEnoughBalance,
 }
 
 #[derive(Serialize, Deserialize, Clone, PartialEq, Eq, schemars::JsonSchema, Debug, Default)]
@@ -299,6 +301,9 @@ impl DBContract<'_> {
                 )
                 .unwrap();
 
+            if bounty.balance < *amount {
+                return Err(ContractError::NotEnoughBalance);
+            }
             bounty.balance = bounty.balance - amount;
         }
 
